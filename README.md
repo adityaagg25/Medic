@@ -1,57 +1,63 @@
+# Brain Signal Analysis for Attention Identification
 
-```markdown
-# Document Genie: Your AI-powered Insight Generator from PDFs
+This project focuses on identifying attention levels using brain signal data. The data was sourced from Kaggle and processed using machine learning techniques to classify attention into high, medium, and low levels based on predicted values.
 
-Document Genie is a powerful Streamlit application designed to extract and analyze text from PDF documents, leveraging the advanced capabilities of Google's Generative AI, specifically the Gemini-PRO model. This tool uses a Retrieval-Augmented Generation (RAG) framework to offer precise, context-aware answers to user queries based on the content of uploaded documents.
+## Dataset
 
-## Features
+- **Dataset Name:** `feature_raw.csv`
+- The dataset was sourced from Kaggle.
+- Data preprocessing steps included:
+  - **Standardization** of the dataset.
+  - **Outlier removal** using the Interquartile Range (IQR) method.
 
-- **Instant Insights**: Extracts and analyses text from uploaded PDF documents to provide instant insights.
-- **Retrieval-Augmented Generation**: Utilizes Google's Generative AI model Gemini-PRO for high-quality, contextually relevant answers.
-- **Secure API Key Input**: Ensures secure entry of Google API keys for accessing generative AI models.
+## Data Processing
 
-## Getting Started
+1. **Outlier Removal & Standardization**:
+   - We applied the IQR method to remove outliers and standardized the data to ensure it followed a consistent scale for model training.
 
-### Prerequisites
+2. **Train-Test Split**:
+   - The dataset was split into:
+     - **80% for training**
+     - **20% for testing**
 
-- Google API Key: Obtain a Google API key to interact with Google's Generative AI models. Visit [Google API Key Setup](https://makersuite.google.com/app/apikey) to get your key.
-- Streamlit: This application is built with Streamlit. Ensure you have Streamlit installed in your environment.
+## Models Applied
 
-### Installation
+We used the following machine learning models to train and test the dataset:
 
-Clone this repository or download the source code to your local machine. Navigate to the application directory and install the required Python packages:
+1. **Random Forest**
+2. **XGBoost**
+3. **Decision Tree**
 
-```bash
-pip install -r requirements.txt
-```
+### Model Performance:
 
-### How to Use
+| Model           | MSE (Train) | R-squared (Train) | MSE (Test) | R-squared (Test) |
+|-----------------|-------------|-------------------|------------|------------------|
+| Random Forest   | 0.000119    | 0.994527          | 0.001782   | 0.934577         |
+| XGBoost         | 0.000029    | 0.998661          | 0.000720   | 0.973577         |
+| Decision Tree   | 0.000000    | 1.000000          | 0.001326   | 0.951297         |
 
-1. **Start the Application**: Launch the Streamlit application by running the command:
-    ```bash
-    streamlit run <path_to_script.py>
-    ```
-    Replace `<path_to_script.py>` with the path to the script file.
+### Best Performing Model:
+- **XGBoost** performed the best, as seen from its lowest **MSE** and highest **R²** score for both training and test sets. It shows strong predictive capabilities and generalizes well to unseen data.
 
-2. **Enter Your Google API Key**: Securely enter your Google API key when prompted. This key enables the application to access Google's Generative AI models.
+## Attention Categorization
 
-3. **Upload PDF Documents**: You can upload one or multiple PDF documents. The application will analyze the content of these documents to respond to queries.
+We used the **NLTK library** to categorize attention levels based on predicted values from the models:
 
-4. **Ask Questions**: Once your documents are processed, you can ask any question related to the content of your uploaded documents.
+- **High Attention**: Predicted values between **0.7 - 1**
+- **Medium Attention**: Predicted values between **0.4 - 0.7**
+- **Low Attention**: Predicted values below **0.4**
 
-### Technical Overview
+### Results:
+Based on the scatter plots, the model's performance on the test data appears to match its performance on the training data. Both datasets show a similar distribution of predicted attention values across different sentiment categories, indicating that the model generalizes well.
 
-- **PDF Processing**: Utilizes `PyPDF2` for extracting text from PDF documents.
-- **Text Chunking**: Employs the `RecursiveCharacterTextSplitter` from LangChain for dividing the extracted text into manageable chunks.
-- **Vector Store Creation**: Uses `FAISS` for creating a searchable vector store from text chunks.
-- **Answer Generation**: Leverages `ChatGoogleGenerativeAI` from LangChain for generating answers to user queries using the context provided by the uploaded documents.
+## Conclusion
 
+- XGBoost emerged as the best model for attention prediction based on brain signal data.
+- The model's generalization capabilities were confirmed through consistent performance across both training and testing data.
 
-### Support
+## How to Run
 
-For issues, questions, or contributions, please refer to the GitHub repository issues section or submit a pull request.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+1. Clone the repository.
+2. Install necessary dependencies (NLTK, scikit-learn, etc.).
+3. Run the code to replicate the results and categorize attention levels.
 
